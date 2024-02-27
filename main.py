@@ -1,6 +1,7 @@
 from tkinter import Tk
 from database_handler import DatabaseHandler
 from file_encryptor_decryptor import FileEncryptorDecryptor
+import pymysql
 
 if __name__ == "__main__":
     # Database credentials

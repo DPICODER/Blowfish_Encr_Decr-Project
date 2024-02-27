@@ -1,7 +1,10 @@
 import os
+from tkinter import Tk
+import string
 from tkinter import filedialog
 from Crypto.Cipher import Blowfish
 from Crypto.Util.Padding import pad, unpad
+import pymysql
 from base64 import b64encode, b64decode
 import random 
 
@@ -83,9 +86,9 @@ class FileEncryptorDecryptor:
 
     def _save_encrypted_file_to_db(self, encrypted_content, key, file_name):
         # Saving encrypted file to the database
-        connection = pymysql.connect(host=self.DATABASE_HOST, port=3306, user=self.DATABASE_USER,
-                                     password=self.DATABASE_PASSWORD, database=self.DATABASE_NAME,
-                                     charset='utf8', cursorclass=pymysql.cursors.DictCursor)
+        connection = pymysql.connect(host=self.db_handler.host, port=3306, user=self.db_handler.user,
+                                    password=self.db_handler.password, database=self.db_handler.database,
+                                    charset='utf8', cursorclass=pymysql.cursors.DictCursor)
 
         try:
             with connection.cursor() as cursor:
@@ -96,20 +99,22 @@ class FileEncryptorDecryptor:
 
         finally:
             connection.close()
+
     def _list_encrypted_files(self):
         # Listing encrypted files from the database
-        connection = pymysql.connect(host=self.DATABASE_HOST, port=3306, user=self.DATABASE_USER,
-                                     password=self.DATABASE_PASSWORD, database=self.DATABASE_NAME,
-                                     charset='utf8', cursorclass=pymysql.cursors.DictCursor)
+        connection = pymysql.connect(host=self.db_handler.host, port=3306, user=self.db_handler.user,
+                                    password=self.db_handler.password, database=self.db_handler.database,
+                                    charset='utf8', cursorclass=pymysql.cursors.DictCursor)
 
         try:
             with connection.cursor() as cursor:
-                sql = f"SELECT file_content, encryption_key, file_name FROM {self.TABLE_NAME}"
+                sql = "SELECT file_content, encryption_key, file_name FROM encrypted_files"
                 cursor.execute(sql)
                 files = cursor.fetchall()
                 return files
         finally:
             connection.close()
+
     def generate_key_with_bcsa(self):
         # Key generation logic
         # Choose key length in bytes (adjusted to 16 to 56 bytes)

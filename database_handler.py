@@ -1,4 +1,5 @@
 import pymysql
+from base64 import b64encode
 
 class DatabaseHandler:
     def __init__(self, host, user, password, database):
@@ -9,8 +10,8 @@ class DatabaseHandler:
 
     def save_encrypted_file(self, encrypted_content, key, file_name):
         # Database connection and saving logic
-        connection = pymysql.connect(host=self.DATABASE_HOST, port=3306, user=self.DATABASE_USER,
-                                     password=self.DATABASE_PASSWORD, database=self.DATABASE_NAME,
+        connection = pymysql.connect(host=self.host, port=3306, user=self.user,
+                                     password=self.password, database=self.database,
                                      charset='utf8', cursorclass=pymysql.cursors.DictCursor)
 
         try:
@@ -25,13 +26,13 @@ class DatabaseHandler:
 
     def list_encrypted_files(self):
         # Database connection and listing logic
-        connection = pymysql.connect(host=self.DATABASE_HOST, port=3306, user=self.DATABASE_USER,
-                                     password=self.DATABASE_PASSWORD, database=self.DATABASE_NAME,
+        connection = pymysql.connect(host=self.host, port=3306, user=self.user,
+                                     password=self.password, database=self.database,
                                      charset='utf8', cursorclass=pymysql.cursors.DictCursor)
 
         try:
             with connection.cursor() as cursor:
-                sql = f"SELECT file_content, encryption_key, file_name FROM {self.TABLE_NAME}"
+                sql = "SELECT file_content, encryption_key, file_name FROM encrypted_files"
                 cursor.execute(sql)
                 files = cursor.fetchall()
                 return files
