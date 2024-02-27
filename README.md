@@ -1,9 +1,5 @@
-Sure, here's a structured explanation for your project's README.md:
-
----
-
 # Blowfish Encryption and Decryption Project
-
+---
 ## Overview
 This project implements a file encryption and decryption system using the Blowfish encryption algorithm. It provides a user-friendly interface to encrypt and decrypt files securely.
 
